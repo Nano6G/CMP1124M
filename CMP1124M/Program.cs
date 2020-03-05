@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace CMP1124M
@@ -7,7 +8,7 @@ namespace CMP1124M
     {
         private static void Main()
         {
-            ReadFiles()
+            List<StreamReader> Files = ReadFiles();
 
             string userOption;
 
@@ -42,13 +43,29 @@ namespace CMP1124M
 
         }
 
-        private static void ReadFiles()
+        private static List<StreamReader> ReadFiles()
         {
+
+            List<StreamReader> Files = new List<StreamReader>();
+
             string directory = Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()));
             string path = Path.GetFullPath(Path.Combine(directory, @"..\"));
 
-            System.IO.StreamReader Net_1_256 = new System.IO.StreamReader(path + @"/Net_1_256.txt");
-            System.IO.StreamReader Net_2_256 = new System.IO.StreamReader(path + @"/Net_2_256.txt");
+            System.IO.StreamReader A1_256 = new System.IO.StreamReader(path + @"/Net_1_256.txt");
+            System.IO.StreamReader A2_256 = new System.IO.StreamReader(path + @"/Net_2_256.txt");
+            System.IO.StreamReader A3_256 = new System.IO.StreamReader(path + @"/Net_3_256.txt");
+            System.IO.StreamReader A1_2048 = new System.IO.StreamReader(path + @"/Net_1_2048.txt");
+            System.IO.StreamReader A2_2048 = new System.IO.StreamReader(path + @"/Net_2_2048.txt");
+            System.IO.StreamReader A3_2048 = new System.IO.StreamReader(path + @"/Net_3_2048.txt");
+
+            Files.Add(A1_256);
+            Files.Add(A2_256);
+            Files.Add(A3_256);
+            Files.Add(A1_2048);
+            Files.Add(A2_2048);
+            Files.Add(A3_2048);
+
+            return Files;
         }
     }
 }
