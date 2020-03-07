@@ -8,65 +8,90 @@ namespace CMP1124M
     {
         private static void Main()
         {
-            List<List<int>> Arrays = ReadFiles();
+            Console.WriteLine("Do you want to:\n1:\tSort an Array\n2:\tSearch an Array\n");
+            Console.Write("Enter your option: ");
 
             string userOption;
-
-            Console.WriteLine("Arrays:\n1:\tNet_1_256\n2:\tNet_2_256\n3:\tNet_3_256\n4:\tNet_1_2048\n5:\tNet_2_2048\n6:\tNet_3_2048");
-            Console.WriteLine("\nEnter which array you wish to search/sort:");
-
             userOption = Console.ReadLine();
+
             if (userOption == "1")
             {
-                List<int> CurrentArray = Arrays[0];
+                CheckSortingAlgorithm();
             }
             else if (userOption == "2")
             {
-                List<int> CurrentArray = Arrays[1];
-                Console.WriteLine("2");
-            }
-            else if (userOption == "3")
-            {
-                List<int> CurrentArray = Arrays[2];
-                Console.WriteLine("3");
-            }
-            else if (userOption == "4")
-            {
-                List<int> CurrentArray = Arrays[3];
-                Console.WriteLine("4");
-            }
-            else if (userOption == "5")
-            {
-                List<int> CurrentArray = Arrays[4];
-                Console.WriteLine("5");
-            }
-            else if (userOption == "6")
-            {
-                List<int> CurrentArray = Arrays[5];
-                Console.WriteLine("6");
+                CheckSearchingAlgorithm();
             }
             else
             {
-                Console.WriteLine("Please enter a valid option\n");
+                Console.WriteLine("Please enter a valid option (1 or 2)");
                 Main();
             }
-
         }
 
         private static void CheckSortingAlgorithm()
         {
             Console.WriteLine("1:\tBubble Sort\n2:\tMerge Sort\n3:\tInsertion Sort\n4:\tQuick Sort\n");
-            Console.WriteLine("Enter which sorting algorithm you want to use:\n");
+            Console.Write("Enter which sorting algorithm you want to use: ");
 
             string userOption;
             userOption = Console.ReadLine();
+
+            CheckArray();
         }
 
         private static void CheckSearchingAlgorithm()
         {
+            Console.WriteLine("1:\tLinear Search\n2:\tBinary Search\n");
+            Console.Write("Enter which sorting algorithm you want to use: ");
 
+            string userOption;
+            userOption = Console.ReadLine();
+
+            CheckArray();
         }
 
+        private static List<int> CheckArray()
+        {
+            List<List<int>> Arrays = ReadFiles();
+
+            string userOption;
+
+            Console.WriteLine("Arrays:\n1:\tNet_1_256\n2:\tNet_2_256\n3:\tNet_3_256\n4:\tNet_1_2048\n5:\tNet_2_2048\n6:\tNet_3_2048");
+            Console.Write("\nEnter which array you wish to search/sort: ");
+
+            userOption = Console.ReadLine();
+            if (userOption == "1")
+            {
+                return Arrays[0];
+            }
+            else if (userOption == "2")
+            {
+                return Arrays[1];
+            }
+            else if (userOption == "3")
+            {
+                return Arrays[2];
+            }
+            else if (userOption == "4")
+            {
+                return Arrays[3];
+            }
+            else if (userOption == "5")
+            {
+                return Arrays[4];
+            }
+            else if (userOption == "6")
+            {
+                return Arrays[5];
+            }
+            else
+            {
+                Console.WriteLine("Please enter a valid option (1-6)\n");
+                CheckArray();
+            }
+            return Arrays[0];
+        }
 
         private static List<List<int>> ReadFiles()
         {
