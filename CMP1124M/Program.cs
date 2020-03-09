@@ -109,6 +109,7 @@ namespace CMP1124M
             }
         }
 
+        //Merge sort algorithm - https://www.w3resource.com/csharp-exercises/searching-and-sorting-algorithm/searching-and-sorting-algorithm-exercise-7.php
         private static List<int> MergeSort(List<int> Unsorted_Array)
         {
             //List<int> Sorted_Array;
@@ -140,36 +141,36 @@ namespace CMP1124M
 
         private static List<int> Merge(List<int> left, List<int> right)
         {
-            List<int> result = new List<int>();
+            List<int> sorted = new List<int>();
 
             while (left.Count > 0 || right.Count > 0)
             {
                 if (left.Count > 0 && right.Count > 0)
                 {
-                    if (left[0] <= right[0])  //Comparing First two elements to see which is smaller
+                    if (left[0] <= right[0])
                     {
-                        result.Add(left[0]);
-                        left.Remove(left[0]);      //Rest of the list minus the first element
+                        sorted.Add(left[0]);
+                        left.Remove(left[0]);
                     }
                     else
                     {
-                        result.Add(right[0]);
+                        sorted.Add(right[0]);
                         right.Remove(right[0]);
                     }
                 }
                 else if (left.Count > 0)
                 {
-                    result.Add(left[0]);
+                    sorted.Add(left[0]);
                     left.Remove(left[0]);
                 }
                 else if (right.Count > 0)
                 {
-                    result.Add(right[0]);
+                    sorted.Add(right[0]);
 
                     right.Remove(right[0]);
                 }
             }
-            return result;
+            return sorted;
         }
 
         private static List<List<int>> ReadFiles()
