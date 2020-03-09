@@ -8,52 +8,8 @@ namespace CMP1124M
     {
         private static void Main()
         {
-            Console.WriteLine("Do you want to:\n1:\tSort an Array\n2:\tSearch an Array\n");
-            Console.Write("Enter your option: ");
-
-            string userOption;
-            userOption = Console.ReadLine();
-
-            if (userOption == "1")
-            {
-                CheckSortingAlgorithm();
-            }
-            else if (userOption == "2")
-            {
-                CheckSearchingAlgorithm();
-            }
-            else
-            {
-                Console.WriteLine("Please enter a valid option (1 or 2)");
-                Main();
-            }
-        }
-
-        private static void CheckSortingAlgorithm()
-        {
-            Console.WriteLine("1:\tBubble Sort\n2:\tMerge Sort\n3:\tInsertion Sort\n4:\tQuick Sort\n");
-            Console.Write("Enter which sorting algorithm you want to use: ");
-
-            string userOption;
-            userOption = Console.ReadLine();
-
-            CheckArray();
-        }
-
-        private static void CheckSearchingAlgorithm()
-        {
-            Console.WriteLine("1:\tLinear Search\n2:\tBinary Search\n");
-            Console.Write("Enter which sorting algorithm you want to use: ");
-
-            string userOption;
-            userOption = Console.ReadLine();
-
-            CheckArray();
-        }
-
-        private static List<int> CheckArray()
-        {
             List<List<int>> Arrays = ReadFiles();
+            List<int> Selected_Array = new List<int>();
 
             string userOption;
 
@@ -61,36 +17,159 @@ namespace CMP1124M
             Console.Write("\nEnter which array you wish to search/sort: ");
 
             userOption = Console.ReadLine();
+
             if (userOption == "1")
             {
-                return Arrays[0];
+                Selected_Array = Arrays[0];
             }
             else if (userOption == "2")
             {
-                return Arrays[1];
+                Selected_Array = Arrays[1];
             }
             else if (userOption == "3")
             {
-                return Arrays[2];
+                Selected_Array = Arrays[2];
             }
             else if (userOption == "4")
             {
-                return Arrays[3];
+                Selected_Array = Arrays[3];
             }
             else if (userOption == "5")
             {
-                return Arrays[4];
+                Selected_Array = Arrays[4];
             }
             else if (userOption == "6")
             {
-                return Arrays[5];
+                Selected_Array = Arrays[5];
             }
             else
             {
                 Console.WriteLine("Please enter a valid option (1-6)\n");
-                CheckArray();
+                Main();
             }
-            return Arrays[0];
+
+            CheckSortingAlgorithm(Selected_Array);
+        }
+
+        private static void CheckSortingAlgorithm(List<int> Selected_Array)
+        {
+            Console.WriteLine("1:\tBubble Sort\n2:\tMerge Sort\n3:\tInsertion Sort\n4:\tQuick Sort\n");
+            Console.Write("Enter which sorting algorithm you want to use: ");
+
+            string userOption;
+            userOption = Console.ReadLine();
+
+            if (userOption == "1")
+            {
+                List<int> Sorted = MergeSort(Selected_Array);
+                foreach (int x in Sorted)
+                {
+                    Console.WriteLine(x);
+                }
+            }
+            else if (userOption == "2")
+            {
+                
+            }
+            else if (userOption == "3")
+            {
+                
+            }
+            else if (userOption == "4")
+            {
+                
+            }
+            else
+            {
+                Console.WriteLine("Please enter a valid option (1-4)\n");
+                CheckSortingAlgorithm(Selected_Array);
+            }
+        }
+
+        private static void CheckSearchingAlgorithm(List<int> Selected_Array)
+        {
+            Console.WriteLine("1:\tLinear Search\n2:\tBinary Search\n");
+            Console.Write("Enter which sorting algorithm you want to use: ");
+
+            string userOption;
+            userOption = Console.ReadLine();
+
+            if (userOption == "1")
+            {
+
+            }
+            else if (userOption == "2")
+            {
+                
+            }
+            else
+            {
+                Console.WriteLine("Please enter a valid option (1-2)\n");
+                CheckSearchingAlgorithm(Selected_Array);
+            }
+        }
+
+        private static List<int> MergeSort(List<int> Unsorted_Array)
+        {
+            //List<int> Sorted_Array;
+
+            if (Unsorted_Array.Count <= 1)
+            {
+                return Unsorted_Array;
+            }
+
+            List<int> left = new List<int>();
+            List<int> right = new List<int>();
+
+            int middle = Unsorted_Array.Count / 2;
+
+            for (int i = 0; i < middle;i++)
+            {
+                left.Add(Unsorted_Array[i]);
+            }
+            for (int i = middle; i < Unsorted_Array.Count; i++)
+            {
+                right.Add(Unsorted_Array[i]);
+            }
+
+            left = MergeSort(left);
+            right = MergeSort(right);
+
+            return Merge(left, right);
+        }
+
+        private static List<int> Merge(List<int> left, List<int> right)
+        {
+            List<int> result = new List<int>();
+
+            while (left.Count > 0 || right.Count > 0)
+            {
+                if (left.Count > 0 && right.Count > 0)
+                {
+                    if (left[0] <= right[0])  //Comparing First two elements to see which is smaller
+                    {
+                        result.Add(left[0]);
+                        left.Remove(left[0]);      //Rest of the list minus the first element
+                    }
+                    else
+                    {
+                        result.Add(right[0]);
+                        right.Remove(right[0]);
+                    }
+                }
+                else if (left.Count > 0)
+                {
+                    result.Add(left[0]);
+                    left.Remove(left[0]);
+                }
+                else if (right.Count > 0)
+                {
+                    result.Add(right[0]);
+
+                    right.Remove(right[0]);
+                }
+            }
+            return result;
         }
 
         private static List<List<int>> ReadFiles()
