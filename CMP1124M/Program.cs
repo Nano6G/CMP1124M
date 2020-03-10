@@ -10,6 +10,7 @@ namespace CMP1124M
         {
             List<List<int>> Arrays = ReadFiles();
             List<int> Selected_Array = new List<int>();
+            bool is_2048 = false;
 
             string userOption;
 
@@ -33,14 +34,17 @@ namespace CMP1124M
             else if (userOption == "4")
             {
                 Selected_Array = Arrays[3];
+                is_2048 = true;
             }
             else if (userOption == "5")
             {
                 Selected_Array = Arrays[4];
+                is_2048 = true;
             }
             else if (userOption == "6")
             {
                 Selected_Array = Arrays[5];
+                is_2048 = true;
             }
             else
             {
@@ -48,11 +52,12 @@ namespace CMP1124M
                 Main();
             }
 
-            CheckSortingAlgorithm(Selected_Array);
+            CheckSortingAlgorithm(Selected_Array, is_2048);
         }
 
-        private static void CheckSortingAlgorithm(List<int> Selected_Array)
+        private static void CheckSortingAlgorithm(List<int> Selected_Array, bool is_2048)
         {
+
             Console.WriteLine("1:\tBubble Sort\n2:\tMerge Sort\n3:\tInsertion Sort\n4:\tQuick Sort\n");
             Console.Write("Enter which sorting algorithm you want to use: ");
 
@@ -70,11 +75,9 @@ namespace CMP1124M
                 List<int> Reverse_Sorted = MergeSort(Selected_Array);
                 Reverse_Sorted.Reverse();
 
+                DisplayValues(Selected_Array, Sorted, is_2048);
 
-                for (int i = 9; i < Sorted.Count; i += 10)
-                {
-                    Console.WriteLine(Sorted[i]);
-                }
+                CheckSearchingAlgorithm(Sorted);
             }
             else if (UserOption == "3")
             {
@@ -87,13 +90,46 @@ namespace CMP1124M
             else
             {
                 Console.WriteLine("Please enter a valid option (1-4)\n");
-                CheckSortingAlgorithm(Selected_Array);
+                CheckSortingAlgorithm(Selected_Array, is_2048);
             }
+        }
+
+        private static void DisplayValues(List<int> Unsorted_Array, List<int> Sorted_Array, bool is_2048)
+        {
+            if (is_2048)
+            {
+                Console.WriteLine("\n\nEvery 50th value before sorting:");
+                for (int i = 49; i < Unsorted_Array.Count; i += 50)
+                {
+                    Console.Write(Unsorted_Array[i] + ", ");
+                }
+
+                Console.WriteLine("\n\nEvery 50th value after sorting:");
+                for (int i = 49; i < Sorted_Array.Count; i += 50)
+                {
+                    Console.Write(Sorted_Array[i] + ", ");
+                }
+            }
+            else
+            {
+                Console.WriteLine("\n\nEvery 10th value before sorting:");
+                for (int i = 9; i < Unsorted_Array.Count; i += 10)
+                {
+                    Console.Write(Unsorted_Array[i] + ", ");
+                }
+
+                Console.WriteLine("\n\nEvery 10th value after sorting:");
+                for (int i = 9; i < Sorted_Array.Count; i += 10)
+                {
+                    Console.Write(Sorted_Array[i] + ", ");
+                }
+            }
+            
         }
 
         private static void CheckSearchingAlgorithm(List<int> Sorted_Array)
         {
-            Console.WriteLine("1:\tLinear Search\n2:\tBinary Search\n");
+            Console.WriteLine("\n\n1:\tLinear Search\n2:\tBinary Search\n");
             Console.Write("Enter which sorting algorithm you want to use: ");
 
             string userOption;
@@ -106,13 +142,21 @@ namespace CMP1124M
                 try
                 {
                     int Value = Convert.ToInt32(UserInput);
-                    List<int> Instances = new List<int>();
-                    List<int> Intances = Linear_Search(Sorted_Array, Value);
+                    List<int> Instances = Linear_Search(Sorted_Array, Value);
 
-                    for (int i = 0; i > Instances.Count; i++)
+                    Console.Write("\nThe value you searched for appears ");
+                    Console.Write(Instances.Count);
+                    Console.Write(" times(s)");
+                    if (Instances.Count > 0)
                     {
-
+                        Console.WriteLine("\nThe value you searched for appears at the following indexes:");
+                        for (int i = 0; i < Instances.Count; i++)
+                        {
+                            Console.Write(Convert.ToString(Instances[i]));
+                            Console.Write(", ");
+                        }
                     }
+                    
                 }
                 catch
                 {
