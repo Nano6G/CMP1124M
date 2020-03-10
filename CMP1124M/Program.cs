@@ -56,26 +56,31 @@ namespace CMP1124M
             Console.WriteLine("1:\tBubble Sort\n2:\tMerge Sort\n3:\tInsertion Sort\n4:\tQuick Sort\n");
             Console.Write("Enter which sorting algorithm you want to use: ");
 
-            string userOption;
-            userOption = Console.ReadLine();
+            string UserOption = Console.ReadLine();
 
-            if (userOption == "1")
+            if (UserOption == "1")
+            {
+                
+            }
+            else if (UserOption == "2")
             {
                 List<int> Sorted = MergeSort(Selected_Array);
-                foreach (int x in Sorted)
+
+
+                List<int> Reverse_Sorted = MergeSort(Selected_Array);
+                Reverse_Sorted.Reverse();
+
+
+                for (int i = 9; i < Sorted.Count; i += 10)
                 {
-                    Console.WriteLine(x);
+                    Console.WriteLine(Sorted[i]);
                 }
             }
-            else if (userOption == "2")
+            else if (UserOption == "3")
             {
                 
             }
-            else if (userOption == "3")
-            {
-                
-            }
-            else if (userOption == "4")
+            else if (UserOption == "4")
             {
                 
             }
@@ -86,7 +91,7 @@ namespace CMP1124M
             }
         }
 
-        private static void CheckSearchingAlgorithm(List<int> Selected_Array)
+        private static void CheckSearchingAlgorithm(List<int> Sorted_Array)
         {
             Console.WriteLine("1:\tLinear Search\n2:\tBinary Search\n");
             Console.Write("Enter which sorting algorithm you want to use: ");
@@ -96,7 +101,24 @@ namespace CMP1124M
 
             if (userOption == "1")
             {
+                Console.Write("Enter the value you wish to search for: ");
+                string UserInput = Console.ReadLine();
+                try
+                {
+                    int Value = Convert.ToInt32(UserInput);
+                    List<int> Instances = new List<int>();
+                    List<int> Intances = Linear_Search(Sorted_Array, Value);
 
+                    for (int i = 0; i > Instances.Count; i++)
+                    {
+
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Please enter a valid integer to search the array for.");
+                    CheckSearchingAlgorithm(Sorted_Array);
+                }
             }
             else if (userOption == "2")
             {
@@ -105,14 +127,14 @@ namespace CMP1124M
             else
             {
                 Console.WriteLine("Please enter a valid option (1-2)\n");
-                CheckSearchingAlgorithm(Selected_Array);
+                CheckSearchingAlgorithm(Sorted_Array);
             }
         }
 
         //Merge sort algorithm - https://www.w3resource.com/csharp-exercises/searching-and-sorting-algorithm/searching-and-sorting-algorithm-exercise-7.php
         private static List<int> MergeSort(List<int> Unsorted_Array)
         {
-            //List<int> Sorted_Array;
+            int counter = 0;
 
             if (Unsorted_Array.Count <= 1)
             {
@@ -171,6 +193,23 @@ namespace CMP1124M
                 }
             }
             return sorted;
+        }
+
+        private static List<int> Linear_Search(List<int> Sorted_Array, int Value)
+        {
+            int Instances = 0;
+            List<int> Instance_Indexes = new List<int>();
+
+            for (int i = 0; i < Sorted_Array.Count; i++)
+            {
+                if (Sorted_Array[i] == Value)
+                {
+                    Instances++;
+                    Instance_Indexes.Add(i);
+                }
+            }
+            
+            return Instance_Indexes;
         }
 
         private static List<List<int>> ReadFiles()
