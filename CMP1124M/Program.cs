@@ -96,7 +96,11 @@ namespace CMP1124M
             }
             else if (UserOption == "4")
             {
-                
+                List<int> Sorted = Quick_Sort(Selected_Array, 0, Selected_Array.Count - 1);
+
+                DisplayValues(Selected_Array, Sorted, is_2048);
+
+                CheckSearchingAlgorithm(Sorted);
             }
             else
             {
@@ -155,11 +159,12 @@ namespace CMP1124M
                     int Value = Convert.ToInt32(UserInput);
                     List<int> Instances = Linear_Search(Sorted_Array, Value);
 
-                    Console.Write("\nThe value you searched for appears ");
-                    Console.Write(Instances.Count);
-                    Console.Write(" times(s)");
                     if (Instances.Count > 0)
                     {
+                        Console.Write("\nThe value you searched for appears ");
+                        Console.Write(Instances.Count);
+                        Console.Write(" times(s)");
+
                         Console.WriteLine("\nThe value you searched for appears at the following indexes:");
                         for (int i = 0; i < Instances.Count; i++)
                         {
@@ -167,7 +172,12 @@ namespace CMP1124M
                             Console.Write(", ");
                         }
                     }
-                    
+                    else
+                    {
+                        Console.WriteLine("\nThe integer you searched for does not appear in the array.\n");
+                        Main();
+                    }
+
                 }
                 catch
                 {
@@ -175,10 +185,44 @@ namespace CMP1124M
                     CheckSearchingAlgorithm(Sorted_Array);
                 }
             }
+
             else if (userOption == "2")
             {
-                
+                Console.Write("Enter the value you wish to search for: ");
+                string UserInput = Console.ReadLine();
+
+                try
+                {
+                    int Value = Convert.ToInt32(UserInput);
+                    List<int> Instances = Binary_Search(Sorted_Array, Value);
+
+                    if (Instances.Count > 0)
+                    {
+                        Console.Write("\nThe value you searched for appears ");
+                        Console.Write(Instances.Count);
+                        Console.Write(" times(s)");
+
+                        Console.WriteLine("\nThe value you searched for appears at the following indexes:");
+                        for (int i = 0; i < Instances.Count; i++)
+                        {
+                            Console.Write(Convert.ToString(Instances[i]));
+                            Console.Write(", ");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nThe integer you searched for does not appear in the array.\n");
+                        Main();
+                    }
+                }
+                catch (Exception x)
+                {
+                    Console.WriteLine("Please enter a valid integer to search the array for.");
+                    CheckSearchingAlgorithm(Sorted_Array);
+                    Console.WriteLine(x.Message);
+                }
             }
+
             else
             {
                 Console.WriteLine("Please enter a valid option (1-2)\n");
@@ -270,6 +314,7 @@ namespace CMP1124M
             return Sorted;
         }
 
+        //Insertion sort algorithm - Lecture 5 slides
         private static List<int> Insertion_Sort(List<int> Unsorted_Array, int Array_Length)
         {
             List<int> Array = new List<int>(Unsorted_Array);
@@ -301,6 +346,71 @@ namespace CMP1124M
             }
 
             return Array;
+        }
+
+        //Quick sort algorithm - Workshop 6
+        private static List<int> Quick_Sort(List<int> Unsorted_Array, int Left, int Right)
+        {
+            List<int> Array = new List<int>(Unsorted_Array);
+
+            int i, j;
+            int Pivot, Temp;
+
+            i = Left;
+            j = Right;
+            Pivot = Array[(Left + Right) / 2];
+
+            do
+            {
+                while ((Array[i] < Pivot) && (i < Right)) i++;
+                while ((Pivot < Array[j]) && (j > Left)) j--;
+
+                if (i <= j)
+                {
+                    Temp = Array[i];
+                    Array[i] = Array[j];
+                    Array[j] = Temp;
+                    i++;
+                    j--;
+                }
+
+            } while (i <= j);
+
+            if (Left < j) Quick_Sort(Array, Left, j);
+            if (i < Right) Quick_Sort(Array, i, Right);
+
+            return Array;
+        }
+
+        //Binary search algorithm - https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
+        private static List<int> Binary_Search(List<int> Array, int Key)
+        {
+            int Min = 0;
+            int Max = Array.Count - 1;
+
+            int Instances = 0;
+            List<int> Instance_Indexes = new List<int>();
+
+            while (Min <= Max)
+            {
+                int Mid = (Min + Max) / 2;
+
+                if (Key == Array[Mid])
+                {
+                    Instances++;
+                    Instance_Indexes.Add(Mid);
+                    return Instance_Indexes;
+                }
+                else if (Key < Array[Mid])
+                {
+                    Max = Mid - 1;
+                }
+                else
+                {
+                    Min = Mid + 1;
+                }
+            }
+            return Instance_Indexes;
         }
 
         private static List<int> Linear_Search(List<int> Sorted_Array, int Value)
