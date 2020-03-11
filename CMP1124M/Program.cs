@@ -14,7 +14,7 @@ namespace CMP1124M
 
             string userOption;
 
-            Console.WriteLine("Arrays:\n1:\tNet_1_256\n2:\tNet_2_256\n3:\tNet_3_256\n4:\tNet_1_2048\n5:\tNet_2_2048\n6:\tNet_3_2048");
+            Console.WriteLine("\n\nArrays:\n1:\tNet_1_256\n2:\tNet_2_256\n3:\tNet_3_256\n4:\tNet_1_2048\n5:\tNet_2_2048\n6:\tNet_3_2048");
             Console.Write("\nEnter which array you wish to search/sort: ");
 
             userOption = Console.ReadLine();
@@ -57,50 +57,70 @@ namespace CMP1124M
 
         private static void CheckSortingAlgorithm(List<int> Selected_Array, bool is_2048)
         {
+            bool Reverse = false;
 
             Console.WriteLine("1:\tBubble Sort\n2:\tMerge Sort\n3:\tInsertion Sort\n4:\tQuick Sort\n");
             Console.Write("Enter which sorting algorithm you want to use: ");
-
             string UserOption = Console.ReadLine();
+
+            Console.Write("\nWould you like to reverse the sorted array? (Y/N): ");
+            string Check_Reverse = Console.ReadLine().ToLower();
+            if (Check_Reverse == "y")
+            {
+                Reverse = true;
+            }
 
             if (UserOption == "1")
             {
                 List<int> Sorted = Bubble_Sort(Selected_Array, Selected_Array.Count);
 
-                List<int> Reverse_Sorted = Bubble_Sort(Selected_Array, Selected_Array.Count);
-                Reverse_Sorted.Reverse();
+                if (Reverse == true)
+                {
+                    Sorted.Reverse();
+                }
 
                 DisplayValues(Selected_Array, Sorted, is_2048);
 
-                CheckSearchingAlgorithm(Sorted);
+                CheckSearchingAlgorithm(Sorted, Reverse);
             }
             else if (UserOption == "2")
             {
                 List<int> Sorted = Merge_Sort(Selected_Array);
 
-
-                List<int> Reverse_Sorted = Merge_Sort(Selected_Array);
-                Reverse_Sorted.Reverse();
+                if (Reverse == true)
+                {
+                    Sorted.Reverse();
+                }
 
                 DisplayValues(Selected_Array, Sorted, is_2048);
 
-                CheckSearchingAlgorithm(Sorted);
+                CheckSearchingAlgorithm(Sorted, Reverse);
             }
             else if (UserOption == "3")
             {
                 List<int> Sorted = Insertion_Sort(Selected_Array, Selected_Array.Count);
 
+                if (Reverse == true)
+                {
+                    Sorted.Reverse();
+                }
+
                 DisplayValues(Selected_Array, Sorted, is_2048);
 
-                CheckSearchingAlgorithm(Sorted);
+                CheckSearchingAlgorithm(Sorted, Reverse);
             }
             else if (UserOption == "4")
             {
                 List<int> Sorted = Quick_Sort(Selected_Array, 0, Selected_Array.Count - 1);
 
+                if (Reverse == true)
+                {
+                    Sorted.Reverse();
+                }
+
                 DisplayValues(Selected_Array, Sorted, is_2048);
 
-                CheckSearchingAlgorithm(Sorted);
+                CheckSearchingAlgorithm(Sorted, Reverse);
             }
             else
             {
@@ -142,7 +162,7 @@ namespace CMP1124M
             
         }
 
-        private static void CheckSearchingAlgorithm(List<int> Sorted_Array)
+        private static void CheckSearchingAlgorithm(List<int> Sorted_Array, bool Reveresed)
         {
             Console.WriteLine("\n\n1:\tLinear Search\n2:\tBinary Search\n");
             Console.Write("Enter which sorting algorithm you want to use: ");
@@ -157,32 +177,12 @@ namespace CMP1124M
                 try
                 {
                     int Value = Convert.ToInt32(UserInput);
-                    List<int> Instances = Linear_Search(Sorted_Array, Value);
-
-                    if (Instances.Count > 0)
-                    {
-                        Console.Write("\nThe value you searched for appears ");
-                        Console.Write(Instances.Count);
-                        Console.Write(" times(s)");
-
-                        Console.WriteLine("\nThe value you searched for appears at the following indexes:");
-                        for (int i = 0; i < Instances.Count; i++)
-                        {
-                            Console.Write(Convert.ToString(Instances[i]));
-                            Console.Write(", ");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nThe integer you searched for does not appear in the array.\n");
-                        Main();
-                    }
-
+                    Linear_Search(Sorted_Array, Value);
                 }
                 catch
                 {
                     Console.WriteLine("Please enter a valid integer to search the array for.");
-                    CheckSearchingAlgorithm(Sorted_Array);
+                    CheckSearchingAlgorithm(Sorted_Array, Reveresed);
                 }
             }
 
@@ -191,46 +191,34 @@ namespace CMP1124M
                 Console.Write("Enter the value you wish to search for: ");
                 string UserInput = Console.ReadLine();
 
+                if (Reveresed == true)
+                {
+                    Sorted_Array.Reverse();
+                }
                 try
                 {
                     int Value = Convert.ToInt32(UserInput);
-                    List<int> Instances = Binary_Search(Sorted_Array, Value);
+                    Binary_Search(Sorted_Array, Value);
 
-                    if (Instances.Count > 0)
-                    {
-                        Console.Write("\nThe value you searched for appears ");
-                        Console.Write(Instances.Count);
-                        Console.Write(" times(s)");
-
-                        Console.WriteLine("\nThe value you searched for appears at the following indexes:");
-                        for (int i = 0; i < Instances.Count; i++)
-                        {
-                            Console.Write(Convert.ToString(Instances[i]));
-                            Console.Write(", ");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nThe integer you searched for does not appear in the array.\n");
-                        Main();
-                    }
+                    
                 }
-                catch (Exception x)
+                catch
                 {
                     Console.WriteLine("Please enter a valid integer to search the array for.");
-                    CheckSearchingAlgorithm(Sorted_Array);
-                    Console.WriteLine(x.Message);
+                    CheckSearchingAlgorithm(Sorted_Array, Reveresed);
                 }
             }
 
             else
             {
                 Console.WriteLine("Please enter a valid option (1-2)\n");
-                CheckSearchingAlgorithm(Sorted_Array);
+                CheckSearchingAlgorithm(Sorted_Array, Reveresed);
             }
+
+            Main();
         }
 
-        //Bubble sort algorithm - Lecture 5 slides
+        //Bubble sort algorithm, (Lambrou, 2020)
         private static List<int> Bubble_Sort(List<int> Unsorted_Array, int Array_Length)
         {
             List<int> Array = new List<int>(Unsorted_Array);
@@ -314,7 +302,7 @@ namespace CMP1124M
             return Sorted;
         }
 
-        //Insertion sort algorithm - Lecture 5 slides
+        //Insertion sort algorithm, (Lambrou, 2020)
         private static List<int> Insertion_Sort(List<int> Unsorted_Array, int Array_Length)
         {
             List<int> Array = new List<int>(Unsorted_Array);
@@ -348,7 +336,7 @@ namespace CMP1124M
             return Array;
         }
 
-        //Quick sort algorithm - Workshop 6
+        //Quick sort algorithm, (Lambrou, 2020)
         private static List<int> Quick_Sort(List<int> Unsorted_Array, int Left, int Right)
         {
             List<int> Array = new List<int>(Unsorted_Array);
@@ -383,7 +371,7 @@ namespace CMP1124M
         }
 
         //Binary search algorithm - https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
-        private static List<int> Binary_Search(List<int> Array, int Key)
+        private static void Binary_Search(List<int> Array, int Key)
         {
             int Min = 0;
             int Max = Array.Count - 1;
@@ -399,7 +387,7 @@ namespace CMP1124M
                 {
                     Instances++;
                     Instance_Indexes.Add(Mid);
-                    return Instance_Indexes;
+                    break;
                 }
                 else if (Key < Array[Mid])
                 {
@@ -410,10 +398,30 @@ namespace CMP1124M
                     Min = Mid + 1;
                 }
             }
-            return Instance_Indexes;
+
+            if (Instances <= 0)
+            {
+                Closest_Linear_Search(Array, Key);
+            }
+            else if (Instances > 0)
+            {
+                Console.Write("\nThe value: ");
+                Console.Write(Key);
+                Console.Write(" appears ");
+                Console.Write(Instance_Indexes.Count);
+                Console.Write(" times(s)");
+
+                Console.Write(" and appears at the following indexes:\n");
+                for (int i = 0; i < Instance_Indexes.Count; i++)
+                {
+                    Console.Write(Convert.ToString(Instance_Indexes[i]));
+                    Console.Write(", ");
+                }
+            }
+            
         }
 
-        private static List<int> Linear_Search(List<int> Sorted_Array, int Value)
+        private static void Linear_Search(List<int> Sorted_Array, int Value)
         {
             int Instances = 0;
             List<int> Instance_Indexes = new List<int>();
@@ -426,8 +434,97 @@ namespace CMP1124M
                     Instance_Indexes.Add(i);
                 }
             }
+
+            if (Instances <= 0)
+            {
+                Closest_Linear_Search(Sorted_Array, Value);
+            }
+            else if (Instances > 0)
+            {
+                Console.Write("\nThe value: ");
+                Console.Write(Value);
+                Console.Write(" appears ");
+                Console.Write(Instance_Indexes.Count);
+                Console.Write(" times(s)");
+
+                Console.Write(" and appears at the following indexes:\n");
+                for (int i = 0; i < Instance_Indexes.Count; i++)
+                {
+                    Console.Write(Convert.ToString(Instance_Indexes[i]));
+                    Console.Write(", ");
+                }
+            }
+        }
+
+        private static void Closest_Linear_Search(List<int> Sorted_Array, int Value)
+        {
+            int Value_To_Lower = Value;
+            int Value_To_Raise = Value;
+
+            int Instances = 0;
+            List<int> Instance_Indexes = new List<int>();
+
+            int Found_Number_1 = 0;
+            int Found_Number_2 = 0;
+            int Difference1 = 0;
+            int Difference2 = 0;
+
+            while (Instances <= 0)
+            {
+                for (int i = 0; i < Sorted_Array.Count; i++)
+                {
+                    if (Sorted_Array[i] == Value_To_Raise)
+                    {
+                        Instances++;
+                        Instance_Indexes.Add(i);
+                        Found_Number_1 = Sorted_Array[i];
+                        Difference1 = Found_Number_1 - Value;
+                    }
+                }
+                Value_To_Raise++;
+            }
             
-            return Instance_Indexes;
+            int Instances2 = 0;
+            while (Instances2 <= 0)
+            {
+                for (int i = 0; i < Sorted_Array.Count; i++)
+                {
+                    if (Sorted_Array[i] == Value_To_Lower)
+                    {
+                        Instances2++;
+                        Instance_Indexes.Add(i);
+                        Found_Number_2 = Sorted_Array[i];
+                        Difference2 = Value - Found_Number_2;
+                    }
+                }
+                Value_To_Lower--;
+            }
+            
+            if (Difference1 < Difference2)
+            {
+                Console.Write("\nThe value: ");
+                Console.Write(Value);
+                Console.Write(" could not be found.");
+
+                Console.Write("\n The nearest value to this is: ");
+                Console.Write(Found_Number_1);
+                Console.Write(", which is found at the following index of the array: ");
+                Console.Write(Instance_Indexes[0]);
+            }
+            
+            if (Difference1 > Difference2)
+            {
+                Console.Write("\nThe value ");
+                Console.Write(Value);
+                Console.Write(" could not be found.");
+
+                Console.Write("\nThe nearest value to this is: ");
+                Console.Write(Found_Number_2);
+                Console.Write(", which is found at the following index of the array: ");
+                Console.Write(Instance_Indexes[1]);
+            }
+
+
         }
 
         private static List<List<int>> ReadFiles()
