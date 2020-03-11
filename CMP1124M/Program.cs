@@ -67,8 +67,8 @@ namespace CMP1124M
             {
                 List<int> Sorted = Bubble_Sort(Selected_Array, Selected_Array.Count);
 
-                //List<int> Reverse_Sorted = Bubble_Sort(Selected_Array, Selected_Array.Count);
-                //Reverse_Sorted.Reverse();
+                List<int> Reverse_Sorted = Bubble_Sort(Selected_Array, Selected_Array.Count);
+                Reverse_Sorted.Reverse();
 
                 DisplayValues(Selected_Array, Sorted, is_2048);
 
@@ -88,7 +88,11 @@ namespace CMP1124M
             }
             else if (UserOption == "3")
             {
-                
+                List<int> Sorted = Insertion_Sort(Selected_Array, Selected_Array.Count);
+
+                DisplayValues(Selected_Array, Sorted, is_2048);
+
+                CheckSearchingAlgorithm(Sorted);
             }
             else if (UserOption == "4")
             {
@@ -264,6 +268,39 @@ namespace CMP1124M
                 }
             }
             return Sorted;
+        }
+
+        private static List<int> Insertion_Sort(List<int> Unsorted_Array, int Array_Length)
+        {
+            List<int> Array = new List<int>(Unsorted_Array);
+            // pre: 0 <= n <= data.length
+            // post: values in data[0 … n-1] are in ascending order
+            {
+                int numSorted = 1; // number of values in place
+                int index; // general index
+                while (numSorted < Array_Length)
+                {
+                    // take the first unsorted value
+                    int temp = Array[numSorted];
+                    // … and insert it among the sorted
+                    for (index = numSorted; index > 0; index--)
+                    {
+                        if (temp < Array[index - 1])
+                        {
+                            Array[index] = Array[index - 1];
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    // reinsert value
+                    Array[index] = temp;
+                    numSorted++;
+                }
+            }
+
+            return Array;
         }
 
         private static List<int> Linear_Search(List<int> Sorted_Array, int Value)
