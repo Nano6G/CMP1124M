@@ -65,14 +65,21 @@ namespace CMP1124M
 
             if (UserOption == "1")
             {
-                
+                List<int> Sorted = Bubble_Sort(Selected_Array, Selected_Array.Count);
+
+                //List<int> Reverse_Sorted = Bubble_Sort(Selected_Array, Selected_Array.Count);
+                //Reverse_Sorted.Reverse();
+
+                DisplayValues(Selected_Array, Sorted, is_2048);
+
+                CheckSearchingAlgorithm(Sorted);
             }
             else if (UserOption == "2")
             {
-                List<int> Sorted = MergeSort(Selected_Array);
+                List<int> Sorted = Merge_Sort(Selected_Array);
 
 
-                List<int> Reverse_Sorted = MergeSort(Selected_Array);
+                List<int> Reverse_Sorted = Merge_Sort(Selected_Array);
                 Reverse_Sorted.Reverse();
 
                 DisplayValues(Selected_Array, Sorted, is_2048);
@@ -175,68 +182,88 @@ namespace CMP1124M
             }
         }
 
-        //Merge sort algorithm - https://www.w3resource.com/csharp-exercises/searching-and-sorting-algorithm/searching-and-sorting-algorithm-exercise-7.php
-        private static List<int> MergeSort(List<int> Unsorted_Array)
+        //Bubble sort algorithm - Lecture 5 slides
+        private static List<int> Bubble_Sort(List<int> Unsorted_Array, int Array_Length)
         {
-            int counter = 0;
+            List<int> Array = new List<int>(Unsorted_Array);
+            for (int i = 0; i < Array_Length-1; i++)
+            {
+                for (int j = 0; j < Array_Length-1-i; j++)
+                {
+                    if (Array[j + 1] < Array[j])
+                    {
+                        int Temp = Array[j];
+                        Array[j] = Array[j + 1];
+                        Array[j + 1] = Temp;
+                    }
+                }
+            }
+
+            return Array;
+        }
+
+        //Merge sort algorithm - https://www.w3resource.com/csharp-exercises/searching-and-sorting-algorithm/searching-and-sorting-algorithm-exercise-7.php
+        private static List<int> Merge_Sort(List<int> Unsorted_Array)
+        {
+            int Counter = 0;
 
             if (Unsorted_Array.Count <= 1)
             {
                 return Unsorted_Array;
             }
 
-            List<int> left = new List<int>();
-            List<int> right = new List<int>();
+            List<int> Left = new List<int>();
+            List<int> Right = new List<int>();
 
-            int middle = Unsorted_Array.Count / 2;
+            int Middle = Unsorted_Array.Count / 2;
 
-            for (int i = 0; i < middle;i++)
+            for (int i = 0; i < Middle;i++)
             {
-                left.Add(Unsorted_Array[i]);
+                Left.Add(Unsorted_Array[i]);
             }
-            for (int i = middle; i < Unsorted_Array.Count; i++)
+            for (int i = Middle; i < Unsorted_Array.Count; i++)
             {
-                right.Add(Unsorted_Array[i]);
+                Right.Add(Unsorted_Array[i]);
             }
 
-            left = MergeSort(left);
-            right = MergeSort(right);
+            Left = Merge_Sort(Left);
+            Right = Merge_Sort(Right);
 
-            return Merge(left, right);
+            return Merge(Left, Right);
         }
 
-        private static List<int> Merge(List<int> left, List<int> right)
+        private static List<int> Merge(List<int> Left, List<int> Right)
         {
-            List<int> sorted = new List<int>();
+            List<int> Sorted = new List<int>();
 
-            while (left.Count > 0 || right.Count > 0)
+            while (Left.Count > 0 || Right.Count > 0)
             {
-                if (left.Count > 0 && right.Count > 0)
+                if (Left.Count > 0 && Right.Count > 0)
                 {
-                    if (left[0] <= right[0])
+                    if (Left[0] <= Right[0])
                     {
-                        sorted.Add(left[0]);
-                        left.Remove(left[0]);
+                        Sorted.Add(Left[0]);
+                        Left.Remove(Left[0]);
                     }
                     else
                     {
-                        sorted.Add(right[0]);
-                        right.Remove(right[0]);
+                        Sorted.Add(Right[0]);
+                        Right.Remove(Right[0]);
                     }
                 }
-                else if (left.Count > 0)
+                else if (Left.Count > 0)
                 {
-                    sorted.Add(left[0]);
-                    left.Remove(left[0]);
+                    Sorted.Add(Left[0]);
+                    Left.Remove(Left[0]);
                 }
-                else if (right.Count > 0)
+                else if (Right.Count > 0)
                 {
-                    sorted.Add(right[0]);
+                    Sorted.Add(Right[0]);
 
-                    right.Remove(right[0]);
+                    Right.Remove(Right[0]);
                 }
             }
-            return sorted;
+            return Sorted;
         }
 
         private static List<int> Linear_Search(List<int> Sorted_Array, int Value)
