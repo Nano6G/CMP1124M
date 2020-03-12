@@ -13,7 +13,7 @@ namespace CMP1124M
             bool is_2048 = false;
 
             string userOption;
-
+            //Determines which array the user wants to sort + search
             Console.WriteLine("\n\nArrays:\n1:\tNet_1_256\n2:\tNet_2_256\n3:\tNet_3_256\n4:\tNet_1_2048\n5:\tNet_2_2048\n6:\tNet_3_2048");
             Console.Write("\nEnter which array you wish to search/sort: ");
 
@@ -51,7 +51,7 @@ namespace CMP1124M
                 Console.WriteLine("Please enter a valid option (1-6)\n");
                 Main();
             }
-
+            //Passes the selected array into the next function
             CheckSortingAlgorithm(Selected_Array, is_2048);
         }
 
@@ -59,10 +59,12 @@ namespace CMP1124M
         {
             bool Reverse = false;
 
+            //Determines what sort the user wants to use on the array
             Console.WriteLine("1:\tBubble Sort\n2:\tMerge Sort\n3:\tInsertion Sort\n4:\tQuick Sort\n");
             Console.Write("Enter which sorting algorithm you want to use: ");
             string UserOption = Console.ReadLine();
 
+            //Checks whether the user wants to sorted array to be reveresed
             Console.Write("\nWould you like to reverse the sorted array? (Y/N): ");
             string Check_Reverse = Console.ReadLine().ToLower();
             if (Check_Reverse == "y")
@@ -70,15 +72,18 @@ namespace CMP1124M
                 Reverse = true;
             }
 
+            //Based on user input, the selected sort is called with the selected array passed in
             if (UserOption == "1")
             {
                 List<int> Sorted = Bubble_Sort(Selected_Array, Selected_Array.Count);
 
+                //If the user decided to reverse the sorted array, that is completed here
                 if (Reverse == true)
                 {
                     Sorted.Reverse();
                 }
 
+                //Every 10th or 50th value is then displayed to the user
                 DisplayValues(Selected_Array, Sorted, is_2048);
 
                 CheckSearchingAlgorithm(Sorted, Reverse);
@@ -131,6 +136,7 @@ namespace CMP1124M
 
         private static void DisplayValues(List<int> Unsorted_Array, List<int> Sorted_Array, bool is_2048)
         {
+            //This function displays every 10th or every 50th value of the unsorted and sorted array, based on whether it is of 256 length or 2048 length
             if (is_2048)
             {
                 Console.WriteLine("\n\nEvery 50th value before sorting:");
@@ -164,6 +170,7 @@ namespace CMP1124M
 
         private static void CheckSearchingAlgorithm(List<int> Sorted_Array, bool Reveresed)
         {
+            //User is asked which search they wish to use
             Console.WriteLine("\n\n1:\tLinear Search\n2:\tBinary Search\n");
             Console.Write("Enter which sorting algorithm you want to use: ");
 
@@ -172,8 +179,10 @@ namespace CMP1124M
 
             if (userOption == "1")
             {
+                //Asks the user what to search for in the array
                 Console.Write("Enter the value you wish to search for: ");
                 string UserInput = Console.ReadLine();
+                //Try and catch to ensure the user enters an integer to search for
                 try
                 {
                     int Value = Convert.ToInt32(UserInput);
@@ -190,7 +199,7 @@ namespace CMP1124M
             {
                 Console.Write("Enter the value you wish to search for: ");
                 string UserInput = Console.ReadLine();
-
+                //Due to binary search requiring an ascending sorted array to work, if the array was previously reveresed, it is now reveresed back to being ascending rather than descending
                 if (Reveresed == true)
                 {
                     Sorted_Array.Reverse();
@@ -221,6 +230,8 @@ namespace CMP1124M
         //Bubble sort algorithm, (Lambrou, 2020)
         private static List<int> Bubble_Sort(List<int> Unsorted_Array, int Array_Length)
         {
+            int Counter = 0;
+
             List<int> Array = new List<int>(Unsorted_Array);
             for (int i = 0; i < Array_Length-1; i++)
             {
@@ -231,9 +242,14 @@ namespace CMP1124M
                         int Temp = Array[j];
                         Array[j] = Array[j + 1];
                         Array[j + 1] = Temp;
+                        Counter++;
                     }
                 }
             }
+
+            //Displays number of steps for the bubble sort to the user
+            Console.Write("\nNumber of steps for the bubble sort: ");
+            Console.Write(Counter);
 
             return Array;
         }
@@ -241,7 +257,6 @@ namespace CMP1124M
         //Merge sort algorithm - https://www.w3resource.com/csharp-exercises/searching-and-sorting-algorithm/searching-and-sorting-algorithm-exercise-7.php
         private static List<int> Merge_Sort(List<int> Unsorted_Array)
         {
-            int Counter = 0;
 
             if (Unsorted_Array.Count <= 1)
             {
@@ -270,6 +285,8 @@ namespace CMP1124M
 
         private static List<int> Merge(List<int> Left, List<int> Right)
         {
+            int Counter = 0;
+
             List<int> Sorted = new List<int>();
 
             while (Left.Count > 0 || Right.Count > 0)
@@ -280,34 +297,39 @@ namespace CMP1124M
                     {
                         Sorted.Add(Left[0]);
                         Left.Remove(Left[0]);
+                        Counter++;
                     }
                     else
                     {
                         Sorted.Add(Right[0]);
                         Right.Remove(Right[0]);
+                        Counter++;
                     }
                 }
                 else if (Left.Count > 0)
                 {
                     Sorted.Add(Left[0]);
                     Left.Remove(Left[0]);
+                    Counter++;
                 }
                 else if (Right.Count > 0)
                 {
                     Sorted.Add(Right[0]);
 
                     Right.Remove(Right[0]);
+                    Counter++;
                 }
             }
+            //I was unsure how to display the number of steps to the user without displaying it multiple times, as this function and the Merge_Sort function run parallel to each other and hence this function is called several times
             return Sorted;
         }
 
         //Insertion sort algorithm, (Lambrou, 2020)
         private static List<int> Insertion_Sort(List<int> Unsorted_Array, int Array_Length)
         {
+            int Counter = 0;
+
             List<int> Array = new List<int>(Unsorted_Array);
-            // pre: 0 <= n <= data.length
-            // post: values in data[0 … n-1] are in ascending order
             {
                 int numSorted = 1; // number of values in place
                 int index; // general index
@@ -321,17 +343,23 @@ namespace CMP1124M
                         if (temp < Array[index - 1])
                         {
                             Array[index] = Array[index - 1];
+                            Counter++;
                         }
                         else
                         {
                             break;
                         }
+                        
                     }
                     // reinsert value
                     Array[index] = temp;
                     numSorted++;
                 }
             }
+
+            //Displays number of steps for the insertion sort to the user
+            Console.Write("\nNumber of steps for the insertion sort: ");
+            Console.Write(Counter);
 
             return Array;
         }
@@ -361,7 +389,6 @@ namespace CMP1124M
                     i++;
                     j--;
                 }
-
             } while (i <= j);
 
             if (Left < j) Quick_Sort(Array, Left, j);
@@ -373,6 +400,8 @@ namespace CMP1124M
         //Binary search algorithm - https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
         private static void Binary_Search(List<int> Array, int Key)
         {
+            int Counter = 0;
+
             int Min = 0;
             int Max = Array.Count - 1;
 
@@ -397,14 +426,21 @@ namespace CMP1124M
                 {
                     Min = Mid + 1;
                 }
+                Counter++;
             }
 
+            //Displays number of steps for the binary search to the user
+            Console.Write("\nNumber of steps for the binary search: ");
+            Console.Write(Counter);
+
+            //If the search cannot find the specified value, the closest value is searched for using this called function
             if (Instances <= 0)
             {
                 Closest_Linear_Search(Array, Key);
             }
             else if (Instances > 0)
             {
+                //Displays the information about the instances to the user
                 Console.Write("\nThe value: ");
                 Console.Write(Key);
                 Console.Write(" appears ");
@@ -421,8 +457,11 @@ namespace CMP1124M
             
         }
 
+        //Simple linear search algorithm which simply checks each item in the array one by one
         private static void Linear_Search(List<int> Sorted_Array, int Value)
         {
+            int Counter = 0;
+
             int Instances = 0;
             List<int> Instance_Indexes = new List<int>();
 
@@ -432,15 +471,23 @@ namespace CMP1124M
                 {
                     Instances++;
                     Instance_Indexes.Add(i);
+                    break;
                 }
+                Counter++;
             }
 
+            //Displays number of steps for the linear search to the user
+            Console.Write("\nNumber of steps for the linear search: ");
+            Console.Write(Counter);
+
+            //If the search cannot find the specified value, the closest value is searched for using this called function
             if (Instances <= 0)
             {
                 Closest_Linear_Search(Sorted_Array, Value);
             }
             else if (Instances > 0)
             {
+                //Displays the information about the instances to the user
                 Console.Write("\nThe value: ");
                 Console.Write(Value);
                 Console.Write(" appears ");
@@ -456,6 +503,7 @@ namespace CMP1124M
             }
         }
 
+        //A linear search algorithm which searches for the nearest value inboth directions and determines which is closer based on the difference
         private static void Closest_Linear_Search(List<int> Sorted_Array, int Value)
         {
             int Value_To_Lower = Value;
@@ -469,6 +517,7 @@ namespace CMP1124M
             int Difference1 = 0;
             int Difference2 = 0;
 
+            //Raises the searched value until one in the array is found
             while (Instances <= 0)
             {
                 for (int i = 0; i < Sorted_Array.Count; i++)
@@ -484,6 +533,7 @@ namespace CMP1124M
                 Value_To_Raise++;
             }
             
+            //Lowers the searched value until one in the array is found
             int Instances2 = 0;
             while (Instances2 <= 0)
             {
@@ -500,6 +550,7 @@ namespace CMP1124M
                 Value_To_Lower--;
             }
             
+            //Displays the nearest value to the user
             if (Difference1 < Difference2)
             {
                 Console.Write("\nThe value: ");
@@ -527,6 +578,7 @@ namespace CMP1124M
 
         }
 
+        //Function which parses through the given files and assigns the contents of them to arrays
         private static List<List<int>> ReadFiles()
         {
 
